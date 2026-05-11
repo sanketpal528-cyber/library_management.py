@@ -58,9 +58,181 @@ This system covers the following functional areas:
 
 ## 5. System Design
 
-### 5.1 Data Structures
+### 5.1 Use Case Diagram
 
-**Books** (stored in `books.json`):
+```mermaid
+graph TD
+    Actor([👤 Librarian])
+
+    Actor --> UC1[Add / Edit / Delete Book]
+    Actor --> UC2[Search Book]
+    Actor --> UC3[Register Member]
+    Actor --> UC4[Search Member]
+    Actor --> UC5[Borrow Book]
+    Actor --> UC6[Return Book]
+    Actor --> UC7[View Records]
+    Actor --> UC8[View Reports & Dashboard]
+
+    UC5 --> UC9([Calculate Due Date])
+    UC6 --> UC10([Calculate Fine])
+    UC10 --> UC11([Update Availability])
+    UC5 --> UC11
+```
+
+---
+
+### 5.2 Class Diagram
+
+```mermaid
+classDiagram
+    class Book {
+        +String bookId
+        +String title
+        +String author
+        +String genre
+        +int copies
+        +int available
+        +addBook()
+        +deleteBook()
+        +searchBook()
+        +updateAvailability()
+    }
+
+    class Member {
+        +String memberId
+        +String name
+        +String email
+        +String phone
+        +List borrowedBooks
+        +register()
+        +deleteMember()
+        +searchMember()
+    }
+
+    class BorrowRecord {
+        +String recordId
+        +String memberId
+        +String bookId
+        +Date borrowDate
+        +Date dueDate
+        +Date returnDate
+        +float fine
+        +borrowBook()
+        +returnBook()
+        +calculateFine()
+    }
+
+    class Library {
+        +List books
+        +List members
+        +List records
+        +getDashboardStats()
+        +generateReport()
+        +saveToStorage()
+        +loadFromStorage()
+    }
+
+    Library "1" --> "many" Book
+    Library "1" --> "many" Member
+    Library "1" --> "many" BorrowRecord
+    BorrowRecord --> Book : references
+    BorrowRecord --> Member : references
+```
+
+---
+
+### 5.3 Sequence Diagram — Borrow a Book
+
+```mermaid
+sequenceDiagram
+    actor Librarian
+    participant UI as Web Interface
+    participant JS as app.js
+    participant LS as localStorage
+
+    Librarian->>UI: Enter Member ID + Book ID
+    UI->>JS: borrowBook(memberId, bookId)
+    JS->>LS: load members, books, records
+    LS-->>JS: return data
+
+    alt Member not found
+        JS-->>UI: ❌ Show error toast
+    else Book not available
+        JS-->>UI: ❌ Show error toast
+    else Valid request
+        JS->>JS: Generate Record ID
+        JS->>JS: Set dueDate = today + 14 days
+        JS->>LS: Save updated books, members, records
+        JS-->>UI: ✅ Show success toast with Record ID & Due Date
+    end
+```
+
+---
+
+### 5.4 Sequence Diagram — Return a Book
+
+```mermaid
+sequenceDiagram
+    actor Librarian
+    participant UI as Web Interface
+    participant JS as app.js
+    participant LS as localStorage
+
+    Librarian->>UI: Enter Record ID
+    UI->>JS: Live fine preview (oninput)
+    JS->>LS: load records
+    LS-->>JS: return record
+    JS->>JS: Calculate fine (overdue days × ₹5)
+    JS-->>UI: Show fine preview
+
+    Librarian->>UI: Click Return Book
+    UI->>JS: returnBook(recordId)
+    JS->>JS: Set returnDate = today
+    JS->>JS: Update book availability +1
+    JS->>JS: Remove book from member.borrowedBooks
+    JS->>LS: Save all updated data
+    JS-->>UI: ✅ Show fine collected toast
+```
+
+---
+
+### 5.5 Activity Diagram — Borrow / Return Flow
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[Librarian opens Borrow section]
+    B --> C[Enter Member ID & Book ID]
+    C --> D{Member exists?}
+    D -- No --> E[Show Error] --> C
+    D -- Yes --> F{Book available?}
+    F -- No --> G[Show Error] --> C
+    F -- Yes --> H[Create BorrowRecord]
+    H --> I[Set Due Date = Today + 14 days]
+    I --> J[Decrease book availability]
+    J --> K[Save to localStorage]
+    K --> L[Show success toast with Record ID]
+    L --> M([End of Borrow])
+
+    M --> N{Return needed?}
+    N -- Yes --> O[Enter Record ID]
+    O --> P{Record valid?}
+    P -- No --> Q[Show Error] --> O
+    P -- Yes --> R{Overdue?}
+    R -- Yes --> S[Calculate Fine = Days × ₹5]
+    R -- No --> T[Fine = ₹0]
+    S --> U[Set returnDate = Today]
+    T --> U
+    U --> V[Increase book availability]
+    V --> W[Save to localStorage]
+    W --> X[Show fine toast]
+    X --> Y([End of Return])
+```
+
+---
+
+### 5.6 Data Structures (localStorage Schema)
+
+**Books** (key: `lms_books`):
 ```json
 {
   "B001": {
@@ -73,51 +245,30 @@ This system covers the following functional areas:
 }
 ```
 
-**Members** (stored in `members.json`):
+**Members** (key: `lms_members`):
 ```json
 {
   "M001": {
     "name": "Sanket Pal",
     "email": "sanket@example.com",
     "phone": "9876543210",
-    "borrowed_books": ["B001"]
+    "borrowedBooks": ["B001"]
   }
 }
 ```
 
-**Records** (stored in `records.json`):
+**Records** (key: `lms_records`):
 ```json
 {
   "R0001": {
-    "member_id": "M001",
-    "book_id": "B001",
-    "borrow_date": "2026-05-01",
-    "due_date": "2026-05-15",
-    "return_date": null,
+    "memberId": "M001",
+    "bookId": "B001",
+    "borrowDate": "2026-05-01",
+    "dueDate": "2026-05-15",
+    "returnDate": null,
     "fine": 0
   }
 }
-```
-
-### 5.2 Module Flow
-
-```
-Main Menu
-├── 1. Book Management
-│     ├── Add Book
-│     ├── View All Books
-│     ├── Search Book
-│     └── Delete Book
-├── 2. Member Management
-│     ├── Register Member
-│     ├── View All Members
-│     └── Search Member
-├── 3. Borrow / Return
-│     ├── Borrow a Book
-│     ├── Return a Book
-│     └── View All Records
-├── 4. View Reports
-└── 5. Exit
 ```
 
 ---
