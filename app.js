@@ -60,27 +60,33 @@ function renderDashboard() {
 
   document.getElementById('dashStats').innerHTML = `
     <div class="stat-card">
-      <div class="stat-label">Total Book Titles</div>
+      <span class="stat-icon">📖</span>
+      <div class="stat-label">Book Titles</div>
       <div class="stat-value">${Object.keys(books).length}</div>
     </div>
     <div class="stat-card green">
+      <span class="stat-icon">✅</span>
       <div class="stat-label">Available Copies</div>
       <div class="stat-value">${availableBooks}</div>
     </div>
     <div class="stat-card blue">
+      <span class="stat-icon">👥</span>
       <div class="stat-label">Total Members</div>
       <div class="stat-value">${totalMembers}</div>
     </div>
     <div class="stat-card orange">
+      <span class="stat-icon">🔄</span>
       <div class="stat-label">Active Borrows</div>
       <div class="stat-value">${activeRecords}</div>
     </div>
     <div class="stat-card red">
+      <span class="stat-icon">⚠️</span>
       <div class="stat-label">Overdue Books</div>
       <div class="stat-value">${overdueCount}</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Total Fines (₹)</div>
+      <span class="stat-icon">💰</span>
+      <div class="stat-label">Fines Collected</div>
       <div class="stat-value">₹${totalFines}</div>
     </div>
   `;
@@ -402,26 +408,32 @@ function renderReports() {
 
   document.getElementById('reportStats').innerHTML = `
     <div class="stat-card">
+      <span class="stat-icon">📖</span>
       <div class="stat-label">Book Titles</div>
       <div class="stat-value">${Object.keys(books).length}</div>
     </div>
     <div class="stat-card">
+      <span class="stat-icon">📦</span>
       <div class="stat-label">Total Copies</div>
       <div class="stat-value">${totalBooks}</div>
     </div>
     <div class="stat-card green">
+      <span class="stat-icon">✅</span>
       <div class="stat-label">Available</div>
       <div class="stat-value">${availableBooks}</div>
     </div>
     <div class="stat-card blue">
+      <span class="stat-icon">👥</span>
       <div class="stat-label">Members</div>
       <div class="stat-value">${totalMembers}</div>
     </div>
     <div class="stat-card orange">
+      <span class="stat-icon">🔄</span>
       <div class="stat-label">Active Borrows</div>
       <div class="stat-value">${activeRecords}</div>
     </div>
     <div class="stat-card red">
+      <span class="stat-icon">💰</span>
       <div class="stat-label">Fines Collected</div>
       <div class="stat-value">₹${totalFines}</div>
     </div>

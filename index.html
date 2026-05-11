@@ -5,19 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Library Management System</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
 
-  <!-- NAVBAR -->
+  <!-- ── NAVBAR ── -->
   <nav class="navbar">
     <div class="nav-brand">📚 LibraryMS</div>
     <ul class="nav-links">
-      <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
-      <li><a href="#" onclick="showSection('books')">Books</a></li>
-      <li><a href="#" onclick="showSection('members')">Members</a></li>
-      <li><a href="#" onclick="showSection('borrow')">Borrow / Return</a></li>
-      <li><a href="#" onclick="showSection('records')">Records</a></li>
-      <li><a href="#" onclick="showSection('reports')">Reports</a></li>
+      <li><a href="#" onclick="showSection('dashboard')"><i class="fa fa-house"></i> Dashboard</a></li>
+      <li><a href="#" onclick="showSection('books')"><i class="fa fa-book"></i> Books</a></li>
+      <li><a href="#" onclick="showSection('members')"><i class="fa fa-users"></i> Members</a></li>
+      <li><a href="#" onclick="showSection('borrow')"><i class="fa fa-rotate"></i> Borrow/Return</a></li>
+      <li><a href="#" onclick="showSection('records')"><i class="fa fa-list"></i> Records</a></li>
+      <li><a href="#" onclick="showSection('reports')"><i class="fa fa-chart-bar"></i> Reports</a></li>
     </ul>
   </nav>
 
@@ -25,61 +27,71 @@
 
     <!-- ── DASHBOARD ── -->
     <section id="dashboard" class="section active">
-      <h2>Welcome to Library Management System</h2>
-      <p class="subtitle">Manage books, members, and borrowing records with ease.</p>
-      <div class="stats-grid" id="dashStats"></div>
-      <div class="quick-actions">
-        <button class="btn btn-primary" onclick="showSection('books')">📖 Manage Books</button>
-        <button class="btn btn-success" onclick="showSection('members')">👤 Manage Members</button>
-        <button class="btn btn-warning" onclick="showSection('borrow')">🔄 Borrow / Return</button>
-        <button class="btn btn-info" onclick="showSection('reports')">📊 View Reports</button>
+
+      <div class="hero-banner">
+        <h1>Welcome to LibraryMS</h1>
+        <p>Your smart library management system — manage books, members &amp; borrowing records with ease.</p>
       </div>
+
+      <div class="stats-grid" id="dashStats"></div>
+
+      <div class="card">
+        <h3><i class="fa fa-bolt" style="color:var(--warning)"></i> Quick Actions</h3>
+        <div class="quick-actions">
+          <button class="btn btn-primary"  onclick="showSection('books')">  <i class="fa fa-plus"></i> Add Book</button>
+          <button class="btn btn-success"  onclick="showSection('members')"><i class="fa fa-user-plus"></i> Add Member</button>
+          <button class="btn btn-warning"  onclick="showSection('borrow')"> <i class="fa fa-rotate"></i> Borrow Book</button>
+          <button class="btn btn-info"     onclick="showSection('reports')"><i class="fa fa-chart-pie"></i> View Reports</button>
+        </div>
+      </div>
+
     </section>
 
     <!-- ── BOOKS ── -->
     <section id="books" class="section">
-      <h2>📖 Book Management</h2>
+      <h2><i class="fa fa-book"></i> Book Management</h2>
+      <p class="subtitle">Add, edit, search and manage your library's book collection.</p>
 
       <div class="card">
-        <h3 id="bookFormTitle">Add New Book</h3>
+        <h3 id="bookFormTitle"><i class="fa fa-plus-circle" style="color:var(--primary-light)"></i> Add New Book</h3>
         <form id="bookForm" onsubmit="saveBook(event)">
           <input type="hidden" id="editBookId" />
           <div class="form-grid">
             <div class="form-group">
-              <label>Book ID</label>
+              <label><i class="fa fa-hashtag"></i> Book ID</label>
               <input type="text" id="bookId" placeholder="e.g. B001" required />
             </div>
             <div class="form-group">
-              <label>Title</label>
+              <label><i class="fa fa-heading"></i> Title</label>
               <input type="text" id="bookTitle" placeholder="Book title" required />
             </div>
             <div class="form-group">
-              <label>Author</label>
+              <label><i class="fa fa-pen-nib"></i> Author</label>
               <input type="text" id="bookAuthor" placeholder="Author name" required />
             </div>
             <div class="form-group">
-              <label>Genre</label>
+              <label><i class="fa fa-tag"></i> Genre</label>
               <input type="text" id="bookGenre" placeholder="e.g. Technology" />
             </div>
             <div class="form-group">
-              <label>Total Copies</label>
+              <label><i class="fa fa-copy"></i> Total Copies</label>
               <input type="number" id="bookCopies" placeholder="1" min="1" required />
             </div>
           </div>
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary" id="bookSubmitBtn">Add Book</button>
-            <button type="button" class="btn btn-secondary" onclick="cancelBookEdit()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="bookSubmitBtn"><i class="fa fa-floppy-disk"></i> Add Book</button>
+            <button type="button" class="btn btn-secondary" onclick="cancelBookEdit()"><i class="fa fa-xmark"></i> Cancel</button>
           </div>
         </form>
       </div>
 
       <div class="card">
         <div class="table-header">
-          <h3>All Books</h3>
-          <input type="text" id="bookSearch" placeholder="🔍 Search by title or author..." oninput="renderBooks()" />
+          <h3><i class="fa fa-table-list" style="color:var(--primary-light)"></i> All Books</h3>
+          <input type="text" id="bookSearch" placeholder="🔍  Search by title or author..." oninput="renderBooks()" />
         </div>
         <div class="table-wrapper">
-          <table id="booksTable">
+          <table>
             <thead>
               <tr>
                 <th>Book ID</th><th>Title</th><th>Author</th><th>Genre</th>
@@ -94,44 +106,45 @@
 
     <!-- ── MEMBERS ── -->
     <section id="members" class="section">
-      <h2>👤 Member Management</h2>
+      <h2><i class="fa fa-users"></i> Member Management</h2>
+      <p class="subtitle">Register and manage library members.</p>
 
       <div class="card">
-        <h3 id="memberFormTitle">Register New Member</h3>
+        <h3 id="memberFormTitle"><i class="fa fa-user-plus" style="color:var(--success)"></i> Register New Member</h3>
         <form id="memberForm" onsubmit="saveMember(event)">
           <input type="hidden" id="editMemberId" />
           <div class="form-grid">
             <div class="form-group">
-              <label>Member ID</label>
+              <label><i class="fa fa-hashtag"></i> Member ID</label>
               <input type="text" id="memberId" placeholder="e.g. M001" required />
             </div>
             <div class="form-group">
-              <label>Full Name</label>
+              <label><i class="fa fa-user"></i> Full Name</label>
               <input type="text" id="memberName" placeholder="Full name" required />
             </div>
             <div class="form-group">
-              <label>Email</label>
+              <label><i class="fa fa-envelope"></i> Email</label>
               <input type="email" id="memberEmail" placeholder="email@example.com" />
             </div>
             <div class="form-group">
-              <label>Phone</label>
+              <label><i class="fa fa-phone"></i> Phone</label>
               <input type="text" id="memberPhone" placeholder="10-digit number" />
             </div>
           </div>
           <div class="form-actions">
-            <button type="submit" class="btn btn-success" id="memberSubmitBtn">Register Member</button>
-            <button type="button" class="btn btn-secondary" onclick="cancelMemberEdit()">Cancel</button>
+            <button type="submit" class="btn btn-success" id="memberSubmitBtn"><i class="fa fa-floppy-disk"></i> Register Member</button>
+            <button type="button" class="btn btn-secondary" onclick="cancelMemberEdit()"><i class="fa fa-xmark"></i> Cancel</button>
           </div>
         </form>
       </div>
 
       <div class="card">
         <div class="table-header">
-          <h3>All Members</h3>
-          <input type="text" id="memberSearch" placeholder="🔍 Search by name or ID..." oninput="renderMembers()" />
+          <h3><i class="fa fa-table-list" style="color:var(--success)"></i> All Members</h3>
+          <input type="text" id="memberSearch" placeholder="🔍  Search by name or ID..." oninput="renderMembers()" />
         </div>
         <div class="table-wrapper">
-          <table id="membersTable">
+          <table>
             <thead>
               <tr>
                 <th>Member ID</th><th>Name</th><th>Email</th><th>Phone</th>
@@ -146,35 +159,34 @@
 
     <!-- ── BORROW / RETURN ── -->
     <section id="borrow" class="section">
-      <h2>🔄 Borrow / Return Books</h2>
+      <h2><i class="fa fa-rotate"></i> Borrow / Return</h2>
+      <p class="subtitle">Issue books to members and process returns with automatic fine calculation.</p>
 
       <div class="borrow-grid">
-        <!-- Borrow -->
         <div class="card">
-          <h3>📤 Borrow a Book</h3>
+          <h3><i class="fa fa-arrow-up-from-bracket" style="color:var(--primary-light)"></i> Borrow a Book</h3>
           <form onsubmit="borrowBook(event)">
             <div class="form-group">
-              <label>Member ID</label>
+              <label><i class="fa fa-user"></i> Member ID</label>
               <input type="text" id="borrowMemberId" placeholder="e.g. M001" required />
             </div>
-            <div class="form-group">
-              <label>Book ID</label>
+            <div class="form-group" style="margin-top:.75rem">
+              <label><i class="fa fa-book"></i> Book ID</label>
               <input type="text" id="borrowBookId" placeholder="e.g. B001" required />
             </div>
-            <button type="submit" class="btn btn-primary btn-full">Borrow Book</button>
+            <button type="submit" class="btn btn-primary btn-full"><i class="fa fa-paper-plane"></i> Issue Book</button>
           </form>
         </div>
 
-        <!-- Return -->
         <div class="card">
-          <h3>📥 Return a Book</h3>
+          <h3><i class="fa fa-arrow-down-to-bracket" style="color:var(--warning)"></i> Return a Book</h3>
           <form onsubmit="returnBook(event)">
             <div class="form-group">
-              <label>Record ID</label>
+              <label><i class="fa fa-receipt"></i> Record ID</label>
               <input type="text" id="returnRecordId" placeholder="e.g. R0001" required />
             </div>
             <div id="finePreview" class="fine-preview hidden"></div>
-            <button type="submit" class="btn btn-warning btn-full">Return Book</button>
+            <button type="submit" class="btn btn-warning btn-full"><i class="fa fa-rotate-left"></i> Return Book</button>
           </form>
         </div>
       </div>
@@ -182,10 +194,12 @@
 
     <!-- ── RECORDS ── -->
     <section id="records" class="section">
-      <h2>📋 Borrow / Return Records</h2>
+      <h2><i class="fa fa-list-check"></i> Borrow / Return Records</h2>
+      <p class="subtitle">Full history of all borrowing and return transactions.</p>
+
       <div class="card">
         <div class="table-header">
-          <h3>All Records</h3>
+          <h3><i class="fa fa-clock-rotate-left" style="color:var(--info)"></i> All Records</h3>
           <select id="recordFilter" onchange="renderRecords()">
             <option value="all">All Records</option>
             <option value="active">Active (Not Returned)</option>
@@ -210,32 +224,35 @@
 
     <!-- ── REPORTS ── -->
     <section id="reports" class="section">
-      <h2>📊 Library Reports</h2>
+      <h2><i class="fa fa-chart-bar"></i> Library Reports</h2>
+      <p class="subtitle">Overview of library statistics, top books, and overdue alerts.</p>
+
       <div class="stats-grid" id="reportStats"></div>
+
       <div class="report-grid">
         <div class="card">
-          <h3>📚 Top Borrowed Books</h3>
+          <h3><i class="fa fa-fire" style="color:var(--secondary)"></i> Top Borrowed Books</h3>
           <ul id="topBooks" class="report-list"></ul>
         </div>
         <div class="card">
-          <h3>⚠️ Overdue Books</h3>
+          <h3><i class="fa fa-triangle-exclamation" style="color:var(--warning)"></i> Overdue Books</h3>
           <ul id="overdueList" class="report-list"></ul>
         </div>
       </div>
     </section>
 
-  </div><!-- /container -->
+  </div>
 
-  <!-- TOAST NOTIFICATION -->
+  <!-- TOAST -->
   <div id="toast" class="toast hidden"></div>
 
-  <!-- CONFIRM MODAL -->
+  <!-- MODAL -->
   <div id="modal" class="modal hidden">
     <div class="modal-box">
       <p id="modalMsg"></p>
       <div class="modal-actions">
-        <button class="btn btn-danger" id="modalConfirm">Confirm</button>
-        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-danger"     id="modalConfirm">Confirm</button>
+        <button class="btn btn-secondary"  onclick="closeModal()">Cancel</button>
       </div>
     </div>
   </div>
