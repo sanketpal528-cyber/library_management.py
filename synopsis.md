@@ -2,14 +2,16 @@
 
 **Student Name:** Sanket Pal  
 **Project Title:** Library Management System  
-**Technology Used:** Python 3 (Console-Based Application)  
-**Date:** May 2026
+**Technology Used:** HTML5, CSS3, JavaScript (Web Application)  
+**Date:** May 2026  
+**🌐 Live Website:** [https://sanketpal528-cyber.github.io/library_management.py/](https://sanketpal528-cyber.github.io/library_management.py/)  
+**📁 GitHub Repository:** [https://github.com/sanketpal528-cyber/library_management.py](https://github.com/sanketpal528-cyber/library_management.py)
 
 ---
 
 ## 1. Introduction
 
-A Library Management System (LMS) is a software application designed to automate and simplify the day-to-day operations of a library. Managing books, members, and borrowing records manually is time-consuming and error-prone. This project provides a simple, efficient, and user-friendly console-based solution to handle all core library operations digitally.
+A Library Management System (LMS) is a software application designed to automate and simplify the day-to-day operations of a library. Managing books, members, and borrowing records manually is time-consuming and error-prone. This project provides a simple, efficient, and user-friendly **web-based solution** to handle all core library operations digitally — accessible directly in any browser without any installation.
 
 ---
 
@@ -27,13 +29,13 @@ This project addresses all of the above problems through a structured digital sy
 
 ## 3. Objectives
 
-- Provide a menu-driven interface for easy navigation
-- Allow librarians to add, view, search, and delete books
+- Provide a clean, web-based interface for easy navigation
+- Allow librarians to add, view, search, and edit books
 - Register and manage library members
 - Issue (borrow) and return books with due date tracking
 - Automatically calculate fines for overdue returns (₹5 per day)
-- Generate summary reports on library status
-- Store all data persistently using JSON files so data is not lost on exit
+- Generate summary reports and a live dashboard
+- Store all data persistently using browser `localStorage` so data is not lost on page refresh
 
 ---
 
@@ -43,12 +45,14 @@ This system covers the following functional areas:
 
 | Module              | Features                                              |
 |---------------------|-------------------------------------------------------|
-| Book Management     | Add, View, Search, Delete books                       |
-| Member Management   | Register, View, Search members                        |
-| Borrow / Return     | Issue books, return books, view all borrow records    |
+| Dashboard           | Live stats — books, members, borrows, fines, overdue  |
+| Book Management     | Add, Edit, View, Search, Delete books                 |
+| Member Management   | Register, Edit, View, Search members                  |
+| Borrow / Return     | Issue books, return books, live fine preview           |
+| Records             | Full history with filters (Active/Returned/Overdue)   |
 | Fine Calculation    | Auto-calculate overdue fines at ₹5/day                |
-| Reports             | Summary of total books, members, borrows, fines       |
-| Data Persistence    | JSON-based file storage (books.json, members.json, records.json) |
+| Reports             | Summary stats, top borrowed books, overdue list       |
+| Data Persistence    | Browser `localStorage` (no server or database needed) |
 
 ---
 
@@ -131,19 +135,19 @@ Main Menu
 
 ## 7. Technologies Used
 
-| Technology | Purpose                          |
-|------------|----------------------------------|
-| Python 3   | Core programming language        |
-| JSON       | Data storage (file-based DB)     |
-| `datetime` | Due date and fine calculation    |
-| `os`       | File existence checks            |
+| Technology   | Purpose                                      |
+|--------------|----------------------------------------------|
+| HTML5        | Page structure and layout                    |
+| CSS3         | Styling, responsive design, animations       |
+| JavaScript   | All logic — CRUD, borrow/return, fines       |
+| localStorage | Persistent data storage in the browser       |
 
 ---
 
 ## 8. Limitations
 
-- This is a console-based application; it does not have a graphical user interface (GUI).
-- Data is stored in local JSON files, not a database like MySQL or SQLite.
+- Data is stored in browser `localStorage` — clearing browser data will erase records.
+- No backend or database — data is not shared across different devices or browsers.
 - No login/authentication system is implemented in this version.
 - Designed for single-user use (no multi-user or network support).
 
@@ -151,18 +155,18 @@ Main Menu
 
 ## 9. Future Enhancements
 
-- Add a GUI using **Tkinter** or **PyQt**
-- Integrate a proper database (**SQLite** or **MySQL**)
+- Integrate a proper backend using **Flask** or **Node.js**
+- Add a database (**SQLite** or **MySQL**) for persistent multi-device storage
 - Add user authentication (Admin / Librarian login)
-- Generate PDF reports for borrowing history
+- Generate and download PDF reports for borrowing history
 - Send email/SMS reminders for overdue books
-- Add a web-based interface using **Flask** or **Django**
+- Add a mobile-friendly PWA (Progressive Web App) version
 
 ---
 
 ## 10. Conclusion
 
-The Library Management System successfully automates the core operations of a library in a simple, efficient, and user-friendly manner. It demonstrates the practical use of Python programming concepts including dictionaries, file I/O, functions, loops, and date/time handling. This project serves as a strong foundation that can be extended into a full-scale library management application with a database and GUI in the future.
+The Library Management System successfully automates the core operations of a library through a clean, modern web interface. It demonstrates practical use of HTML, CSS, and JavaScript including DOM manipulation, localStorage, date/time handling, and responsive design. The live website is accessible at **[https://sanketpal528-cyber.github.io/library_management.py/](https://sanketpal528-cyber.github.io/library_management.py/)** and serves as a strong foundation that can be extended with a backend and database in the future.
 
 ---
 

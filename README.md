@@ -1,41 +1,62 @@
 # 📚 Library Management System
 
-A console-based Library Management System built with Python 3.
+A web-based Library Management System built with HTML, CSS, and JavaScript.
+
+## 🌐 Live Website
+
+**👉 [https://sanketpal528-cyber.github.io/library_management.py/](https://sanketpal528-cyber.github.io/library_management.py/)**
+
+> To activate the live link, enable GitHub Pages:
+> 1. Go to your repo on GitHub
+> 2. Click **Settings** → **Pages**
+> 3. Under **Source**, select **Deploy from a branch**
+> 4. Choose **main** branch, **/ (root)** folder → click **Save**
+> 5. Wait ~1 minute, then visit the link above ✅
+
+---
 
 ## Features
-- Add, view, search, and delete books
-- Register and manage library members
-- Borrow and return books with 14-day due dates
-- Automatic fine calculation (₹5/day for overdue returns)
-- Persistent data storage using JSON files
-- Summary reports
 
-## How to Run
+- 📖 Add, view, search, and delete books with availability tracking
+- 👤 Register and manage library members
+- 🔄 Borrow and return books with 14-day due dates
+- 💰 Automatic fine calculation (₹5/day for overdue returns)
+- 📋 Filterable borrow/return records (Active / Returned / Overdue)
+- 📊 Live dashboard and reports
+- 💾 Data saved in browser `localStorage` — no server needed
 
-```bash
-python main.py
-```
+## How to Run Locally
 
-No external libraries required — uses only Python standard library.
+Just open `index.html` in any browser — no installation required.
 
 ## Project Structure
 
 ```
-├── main.py          # Main application
-├── books.json       # Book data (auto-created)
-├── members.json     # Member data (auto-created)
-├── records.json     # Borrow/return records (auto-created)
+├── index.html       # Main website page
+├── style.css        # Styling and layout
+├── app.js           # All logic (books, members, borrow, fines, reports)
+├── main.py          # Console-based version (Python)
 ├── synopsis.md      # Project synopsis
 └── README.md        # This file
 ```
 
-## Menu Overview
+## Tech Stack
+
+| Technology   | Purpose                              |
+|--------------|--------------------------------------|
+| HTML5        | Page structure                       |
+| CSS3         | Styling, responsive layout           |
+| JavaScript   | Logic, CRUD, fine calculation        |
+| localStorage | Persistent data storage in browser   |
+
+## Website Sections
 
 ```
-Main Menu
-├── 1. Book Management     → Add / View / Search / Delete books
-├── 2. Member Management   → Register / View / Search members
-├── 3. Borrow / Return     → Issue books, return books, view records
-├── 4. View Reports        → Library summary statistics
-└── 5. Exit
+Navbar
+├── Dashboard      → Live stats (books, members, borrows, fines)
+├── Books          → Add / Edit / Delete / Search books
+├── Members        → Register / Edit / Delete / Search members
+├── Borrow/Return  → Issue books, return with live fine preview
+├── Records        → Full history with filters
+└── Reports        → Summary stats + top books + overdue list
 ```
