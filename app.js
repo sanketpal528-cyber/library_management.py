@@ -2,6 +2,13 @@
 const load = key => JSON.parse(localStorage.getItem(key) || '{}');
 const save = (key, val) => localStorage.setItem(key, JSON.stringify(val));
 
+// ── Always fresh from localStorage ───────────────────────────────────────────
+function syncData() {
+  books   = load('lms_books');
+  members = load('lms_members');
+  records = load('lms_records');
+}
+
 // ── Data stores ───────────────────────────────────────────────────────────────
 let books   = load('lms_books');
 let members = load('lms_members');
@@ -12,12 +19,16 @@ function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 
-  // Refresh relevant section
+  // Always reload fresh data from localStorage before rendering
+  syncData();
+
   if (id === 'dashboard') renderDashboard();
   if (id === 'books')     renderBooks();
   if (id === 'members')   renderMembers();
   if (id === 'records')   renderRecords();
   if (id === 'reports')   renderReports();
+  if (id === 'catalogue') renderCatalogue();
+  if (id === 'settings')  renderSettings();
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
@@ -51,6 +62,7 @@ const fmtDate  = d => d ? new Date(d).toLocaleDateString('en-IN', { day:'2-digit
 
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
 function renderDashboard() {
+  syncData();
   const totalBooks     = Object.values(books).reduce((s, b) => s + b.copies, 0);
   const availableBooks = Object.values(books).reduce((s, b) => s + b.available, 0);
   const totalMembers   = Object.keys(members).length;
@@ -151,6 +163,7 @@ function deleteBook(id) {
 }
 
 function renderBooks() {
+  syncData();
   const q    = (document.getElementById('bookSearch').value || '').toLowerCase();
   const tbody = document.getElementById('booksBody');
   const list  = Object.entries(books).filter(([id, b]) =>
@@ -245,6 +258,7 @@ function deleteMember(id) {
 }
 
 function renderMembers() {
+  syncData();
   const q     = (document.getElementById('memberSearch').value || '').toLowerCase();
   const tbody = document.getElementById('membersBody');
   const list  = Object.entries(members).filter(([id, m]) =>
@@ -336,6 +350,7 @@ function returnBook(e) {
 
 // Live fine preview while typing record ID
 document.addEventListener('DOMContentLoaded', () => {
+  syncData();
   const inp = document.getElementById('returnRecordId');
   if (inp) {
     inp.addEventListener('input', () => {
@@ -359,6 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── RECORDS ───────────────────────────────────────────────────────────────────
 function renderRecords() {
+  syncData();
   const filter = document.getElementById('recordFilter').value;
   const tbody  = document.getElementById('recordsBody');
 
@@ -399,6 +415,7 @@ function renderRecords() {
 
 // ── REPORTS ───────────────────────────────────────────────────────────────────
 function renderReports() {
+  syncData();
   const totalBooks     = Object.values(books).reduce((s, b) => s + b.copies, 0);
   const availableBooks = Object.values(books).reduce((s, b) => s + b.available, 0);
   const totalMembers   = Object.keys(members).length;
@@ -468,14 +485,6 @@ function renderReports() {
 // ═══════════════════════════════════════════════════════════════════
 // NEW PAGES — CATALOGUE · ABOUT · SETTINGS
 // ═══════════════════════════════════════════════════════════════════
-
-// ── showSection extension ─────────────────────────────────────────
-const _origShow = showSection;
-showSection = function(id) {
-  _origShow(id);
-  if (id === 'catalogue') renderCatalogue();
-  if (id === 'settings')  renderSettings();
-};
 
 // ── CATALOGUE ─────────────────────────────────────────────────────
 const COVER_COLORS = [
