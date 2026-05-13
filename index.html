@@ -5,10 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Library Management System</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
+
+  <!-- ── LOADING SCREEN ── -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">📚</div>
+      <div class="loader-title">LibraryMS</div>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+      <div class="loader-text">Initializing System...</div>
+    </div>
+  </div>
+
+  <!-- ── BACKGROUND CANVAS ── -->
+  <canvas id="bgCanvas"></canvas>
 
   <!-- ── NAVBAR ── -->
   <nav class="navbar">
@@ -29,7 +41,7 @@
     <section id="dashboard" class="section active">
 
       <div class="hero-banner">
-        <h1>Welcome to LibraryMS</h1>
+        <h1><span id="typingText"></span><span class="cursor">|</span></h1>
         <p>Your smart library management system — manage books, members &amp; borrowing records with ease.</p>
       </div>
 
@@ -258,5 +270,54 @@
   </div>
 
   <script src="app.js"></script>
+  <script src="bg.js"></script>
+  <script>
+    // ── Loading screen ──────────────────────────────────────────
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('loader');
+      const fill   = document.querySelector('.loader-fill');
+      const txt    = document.querySelector('.loader-text');
+      const steps  = ['Initializing System...','Loading Books...','Connecting Members...','Ready!'];
+      let i = 0;
+      const iv = setInterval(() => {
+        i++;
+        if (i < steps.length) txt.textContent = steps[i];
+        fill.style.width = ((i + 1) / steps.length * 100) + '%';
+        if (i >= steps.length - 1) {
+          clearInterval(iv);
+          setTimeout(() => {
+            loader.classList.add('hide');
+            setTimeout(() => loader.remove(), 600);
+          }, 400);
+        }
+      }, 450);
+    });
+
+    // ── Typing animation ────────────────────────────────────────
+    const phrases = ['Welcome to LibraryMS', 'Manage Your Books', 'Track Members', 'Smart Fine System'];
+    let pi = 0, ci = 0, deleting = false;
+    const el = document.getElementById('typingText');
+    function type() {
+      const phrase = phrases[pi];
+      if (!deleting) {
+        el.textContent = phrase.slice(0, ++ci);
+        if (ci === phrase.length) { deleting = true; setTimeout(type, 1800); return; }
+      } else {
+        el.textContent = phrase.slice(0, --ci);
+        if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+      }
+      setTimeout(type, deleting ? 45 : 90);
+    }
+    setTimeout(type, 1800);
+
+    // ── Scroll fade-in for cards ────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.card, .stat-card').forEach(el => {
+      el.classList.add('fade-in-card');
+      observer.observe(el);
+    });
+  </script>
 </body>
 </html>
