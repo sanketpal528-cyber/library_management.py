@@ -32,6 +32,9 @@
       <li><a href="#" onclick="showSection('borrow')"><i class="fa fa-rotate"></i> Borrow/Return</a></li>
       <li><a href="#" onclick="showSection('records')"><i class="fa fa-list"></i> Records</a></li>
       <li><a href="#" onclick="showSection('reports')"><i class="fa fa-chart-bar"></i> Reports</a></li>
+      <li><a href="#" onclick="showSection('catalogue')"><i class="fa fa-grip"></i> Catalogue</a></li>
+      <li><a href="#" onclick="showSection('about')"><i class="fa fa-circle-info"></i> About</a></li>
+      <li><a href="#" onclick="showSection('settings')"><i class="fa fa-gear"></i> Settings</a></li>
     </ul>
   </nav>
 
@@ -250,6 +253,269 @@
           <h3><i class="fa fa-triangle-exclamation" style="color:var(--warning)"></i> Overdue Books</h3>
           <ul id="overdueList" class="report-list"></ul>
         </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         PAGE: CATALOGUE  —  Visual book card grid
+    ══════════════════════════════════════════════════════════════ -->
+    <section id="catalogue" class="section">
+      <h2><i class="fa fa-grip"></i> Book Catalogue</h2>
+      <p class="subtitle">Browse the entire collection as visual cards. Click a card to borrow.</p>
+
+      <!-- Filter bar -->
+      <div class="cat-filterbar">
+        <input  type="text"   id="catSearch"  placeholder="🔍  Search title, author, genre..." oninput="renderCatalogue()" />
+        <select id="catGenre" onchange="renderCatalogue()">
+          <option value="">All Genres</option>
+        </select>
+        <select id="catSort" onchange="renderCatalogue()">
+          <option value="title">Sort: Title A–Z</option>
+          <option value="author">Sort: Author</option>
+          <option value="available">Sort: Available</option>
+        </select>
+        <span id="catCount" class="cat-count"></span>
+      </div>
+
+      <!-- Book cards grid -->
+      <div id="catalogueGrid" class="catalogue-grid"></div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         PAGE: ABOUT  —  Project info, timeline, team
+    ══════════════════════════════════════════════════════════════ -->
+    <section id="about" class="section">
+
+      <!-- Hero -->
+      <div class="about-hero">
+        <div class="about-hero-text">
+          <div class="about-badge">v1.0 · May 2026</div>
+          <h1>About LibraryMS</h1>
+          <p>A futuristic, fully client-side Library Management System built with pure HTML, CSS &amp; JavaScript. No server. No database. Just the browser.</p>
+          <div class="about-links">
+            <a href="https://github.com/sanketpal528-cyber/library_management.py" target="_blank" class="btn btn-primary"><i class="fa-brands fa-github"></i> GitHub Repo</a>
+            <a href="https://sanketpal528-cyber.github.io/library_management.py/" target="_blank" class="btn btn-secondary"><i class="fa fa-globe"></i> Live Site</a>
+          </div>
+        </div>
+        <div class="about-hero-visual">
+          <div class="orbit-ring ring1"></div>
+          <div class="orbit-ring ring2"></div>
+          <div class="orbit-ring ring3"></div>
+          <div class="orbit-center">📚</div>
+          <div class="orbit-dot dot1">📖</div>
+          <div class="orbit-dot dot2">👤</div>
+          <div class="orbit-dot dot3">📊</div>
+          <div class="orbit-dot dot4">⚡</div>
+        </div>
+      </div>
+
+      <!-- Feature highlights -->
+      <div class="feature-highlights">
+        <div class="fh-card">
+          <div class="fh-icon" style="background:linear-gradient(135deg,#6c63ff,#a89cff)">📖</div>
+          <h3>Book Management</h3>
+          <p>Add, edit, search and delete books with real-time availability tracking and status badges.</p>
+        </div>
+        <div class="fh-card">
+          <div class="fh-icon" style="background:linear-gradient(135deg,#06d6a0,#059669)">👥</div>
+          <h3>Member Registry</h3>
+          <p>Register members, track their borrowed books, and manage their profiles easily.</p>
+        </div>
+        <div class="fh-card">
+          <div class="fh-icon" style="background:linear-gradient(135deg,#ffd166,#f59e0b)">🔄</div>
+          <h3>Smart Borrow/Return</h3>
+          <p>14-day loan periods with live fine preview. ₹5/day overdue fine calculated automatically.</p>
+        </div>
+        <div class="fh-card">
+          <div class="fh-icon" style="background:linear-gradient(135deg,#f72585,#ef476f)">📊</div>
+          <h3>Live Reports</h3>
+          <p>Dashboard stats, top borrowed books, overdue alerts — all updated in real time.</p>
+        </div>
+        <div class="fh-card">
+          <div class="fh-icon" style="background:linear-gradient(135deg,#118ab2,#0ea5e9)">💾</div>
+          <h3>Persistent Storage</h3>
+          <p>All data saved in browser localStorage. No server needed — works completely offline.</p>
+        </div>
+        <div class="fh-card">
+          <div class="fh-icon" style="background:linear-gradient(135deg,#7b2fff,#6c63ff)">🎨</div>
+          <h3>Futuristic UI</h3>
+          <p>Animated particles, circuit lines, neon waves, glassmorphism cards and smooth transitions.</p>
+        </div>
+      </div>
+
+      <!-- Development timeline -->
+      <h2 class="section-divider-title"><i class="fa fa-timeline"></i> Development Timeline</h2>
+      <div class="timeline">
+        <div class="tl-item left">
+          <div class="tl-dot" style="background:#6c63ff"></div>
+          <div class="tl-card">
+            <div class="tl-date">May 11, 2026</div>
+            <h4>Project Started</h4>
+            <p>Initial Python console-based version created. Basic book add/view functionality.</p>
+          </div>
+        </div>
+        <div class="tl-item right">
+          <div class="tl-dot" style="background:#06d6a0"></div>
+          <div class="tl-card">
+            <div class="tl-date">May 12, 2026</div>
+            <h4>Web Version Built</h4>
+            <p>Full HTML/CSS/JS website with Books, Members, Borrow/Return, Records and Reports.</p>
+          </div>
+        </div>
+        <div class="tl-item left">
+          <div class="tl-dot" style="background:#f72585"></div>
+          <div class="tl-card">
+            <div class="tl-date">May 12, 2026</div>
+            <h4>Futuristic UI Upgrade</h4>
+            <p>Dark theme, glassmorphism, Poppins font, Font Awesome icons, animated backgrounds.</p>
+          </div>
+        </div>
+        <div class="tl-item right">
+          <div class="tl-dot" style="background:#ffd166"></div>
+          <div class="tl-card">
+            <div class="tl-date">May 13, 2026</div>
+            <h4>Animation Engine</h4>
+            <p>Canvas-based bg.js: particles, circuit lines, neon waves, mouse interaction, loading screen.</p>
+          </div>
+        </div>
+        <div class="tl-item left">
+          <div class="tl-dot" style="background:#00d4ff"></div>
+          <div class="tl-card">
+            <div class="tl-date">May 13, 2026</div>
+            <h4>New Pages Added</h4>
+            <p>Catalogue, About, and Settings pages with unique layouts and interactions.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech stack -->
+      <h2 class="section-divider-title"><i class="fa fa-layer-group"></i> Tech Stack</h2>
+      <div class="tech-stack">
+        <div class="tech-pill" style="--c:#e34c26">HTML5</div>
+        <div class="tech-pill" style="--c:#264de4">CSS3</div>
+        <div class="tech-pill" style="--c:#f7df1e">JavaScript</div>
+        <div class="tech-pill" style="--c:#6c63ff">localStorage</div>
+        <div class="tech-pill" style="--c:#528dd3">Font Awesome</div>
+        <div class="tech-pill" style="--c:#4285f4">Google Fonts</div>
+        <div class="tech-pill" style="--c:#24292e">GitHub Pages</div>
+        <div class="tech-pill" style="--c:#2088ff">GitHub Actions</div>
+      </div>
+
+      <!-- Developer card -->
+      <h2 class="section-divider-title"><i class="fa fa-user-astronaut"></i> Developer</h2>
+      <div class="dev-card">
+        <div class="dev-avatar">SP</div>
+        <div class="dev-info">
+          <h3>Sanket Pal</h3>
+          <p>Computer Engineering Student · Micro Project 2026</p>
+          <div class="dev-links">
+            <a href="https://github.com/sanketpal528-cyber" target="_blank" class="btn btn-secondary btn-sm"><i class="fa-brands fa-github"></i> GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         PAGE: SETTINGS  —  Preferences & data management
+    ══════════════════════════════════════════════════════════════ -->
+    <section id="settings" class="section">
+      <h2><i class="fa fa-gear"></i> Settings</h2>
+      <p class="subtitle">Customize your experience and manage library data.</p>
+
+      <div class="settings-grid">
+
+        <!-- Appearance -->
+        <div class="card settings-card">
+          <h3><i class="fa fa-palette" style="color:var(--primary-light)"></i> Appearance</h3>
+          <div class="setting-row">
+            <div class="setting-label">
+              <span>Accent Color</span>
+              <small>Primary theme color</small>
+            </div>
+            <div class="color-swatches">
+              <div class="swatch active" data-color="#6c63ff" style="background:#6c63ff" onclick="setAccent('#6c63ff','#574fd6','#a89cff',this)"></div>
+              <div class="swatch" data-color="#06d6a0" style="background:#06d6a0" onclick="setAccent('#06d6a0','#059669','#4ade80',this)"></div>
+              <div class="swatch" data-color="#f72585" style="background:#f72585" onclick="setAccent('#f72585','#c4006a','#ff6eb4',this)"></div>
+              <div class="swatch" data-color="#00d4ff" style="background:#00d4ff" onclick="setAccent('#00d4ff','#0099cc','#66e5ff',this)"></div>
+              <div class="swatch" data-color="#ffd166" style="background:#ffd166" onclick="setAccent('#ffd166','#f59e0b','#ffe599',this)"></div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label">
+              <span>Animations</span>
+              <small>Background particle effects</small>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="toggleAnim" checked onchange="toggleAnimations(this)"/>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label">
+              <span>Compact Mode</span>
+              <small>Reduce card padding</small>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="toggleCompact" onchange="toggleCompact(this)"/>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Library Config -->
+        <div class="card settings-card">
+          <h3><i class="fa fa-sliders" style="color:var(--success)"></i> Library Configuration</h3>
+          <div class="setting-row">
+            <div class="setting-label">
+              <span>Library Name</span>
+              <small>Shown in navbar</small>
+            </div>
+            <input type="text" id="libName" class="setting-input" placeholder="LibraryMS" />
+          </div>
+          <div class="setting-row">
+            <div class="setting-label">
+              <span>Loan Period (days)</span>
+              <small>Default: 14 days</small>
+            </div>
+            <input type="number" id="loanDays" class="setting-input" value="14" min="1" max="60" style="width:80px"/>
+          </div>
+          <div class="setting-row">
+            <div class="setting-label">
+              <span>Fine Per Day (₹)</span>
+              <small>Default: ₹5</small>
+            </div>
+            <input type="number" id="fineRate" class="setting-input" value="5" min="1" style="width:80px"/>
+          </div>
+          <button class="btn btn-success" style="margin-top:1rem" onclick="saveSettings()"><i class="fa fa-floppy-disk"></i> Save Config</button>
+        </div>
+
+        <!-- Data Management -->
+        <div class="card settings-card">
+          <h3><i class="fa fa-database" style="color:var(--warning)"></i> Data Management</h3>
+          <div class="data-stats" id="dataStats"></div>
+          <div class="setting-actions">
+            <button class="btn btn-info" onclick="exportData()"><i class="fa fa-download"></i> Export Data (JSON)</button>
+            <label class="btn btn-secondary" style="cursor:pointer">
+              <i class="fa fa-upload"></i> Import Data
+              <input type="file" accept=".json" style="display:none" onchange="importData(event)"/>
+            </label>
+            <button class="btn btn-danger" onclick="clearAllData()"><i class="fa fa-trash"></i> Clear All Data</button>
+          </div>
+        </div>
+
+        <!-- System Info -->
+        <div class="card settings-card">
+          <h3><i class="fa fa-circle-info" style="color:var(--info)"></i> System Info</h3>
+          <div class="info-list">
+            <div class="info-row"><span>Version</span><span class="info-val">1.0.0</span></div>
+            <div class="info-row"><span>Storage Used</span><span class="info-val" id="storageUsed">—</span></div>
+            <div class="info-row"><span>Browser</span><span class="info-val" id="browserInfo">—</span></div>
+            <div class="info-row"><span>Last Updated</span><span class="info-val">May 13, 2026</span></div>
+            <div class="info-row"><span>GitHub</span><span class="info-val"><a href="https://github.com/sanketpal528-cyber/library_management.py" target="_blank" style="color:var(--primary-light)">View Repo</a></span></div>
+          </div>
+        </div>
+
       </div>
     </section>
 

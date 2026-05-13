@@ -464,3 +464,238 @@ function renderReports() {
       }).join('')
     : `<li style="color:var(--muted)">No overdue books. 🎉</li>`;
 }
+
+// ═══════════════════════════════════════════════════════════════════
+// NEW PAGES — CATALOGUE · ABOUT · SETTINGS
+// ═══════════════════════════════════════════════════════════════════
+
+// ── showSection extension ─────────────────────────────────────────
+const _origShow = showSection;
+showSection = function(id) {
+  _origShow(id);
+  if (id === 'catalogue') renderCatalogue();
+  if (id === 'settings')  renderSettings();
+};
+
+// ── CATALOGUE ─────────────────────────────────────────────────────
+const COVER_COLORS = [
+  'linear-gradient(135deg,#6c63ff,#a89cff)',
+  'linear-gradient(135deg,#f72585,#ef476f)',
+  'linear-gradient(135deg,#06d6a0,#059669)',
+  'linear-gradient(135deg,#ffd166,#f59e0b)',
+  'linear-gradient(135deg,#118ab2,#0ea5e9)',
+  'linear-gradient(135deg,#7b2fff,#6c63ff)',
+  'linear-gradient(135deg,#00d4ff,#0099cc)',
+  'linear-gradient(135deg,#ff6b6b,#f72585)',
+];
+
+const BOOK_EMOJIS = ['📚','📖','📕','📗','📘','📙','📓','📔','📒','🔬','💻','🌍','🎭','🔭','⚗️','🧬'];
+
+function renderCatalogue() {
+  books = load('lms_books');
+  const q      = (document.getElementById('catSearch').value || '').toLowerCase();
+  const genre  = document.getElementById('catGenre').value;
+  const sort   = document.getElementById('catSort').value;
+  const grid   = document.getElementById('catalogueGrid');
+  const genSel = document.getElementById('catGenre');
+
+  // Populate genre dropdown
+  const genres = [...new Set(Object.values(books).map(b => b.genre).filter(Boolean))];
+  const curVal = genSel.value;
+  genSel.innerHTML = '<option value="">All Genres</option>' +
+    genres.map(g => `<option value="${g}" ${g === curVal ? 'selected' : ''}>${g}</option>`).join('');
+
+  // Filter
+  let list = Object.entries(books).filter(([id, b]) => {
+    const matchQ = !q || b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q) || (b.genre||'').toLowerCase().includes(q);
+    const matchG = !genre || b.genre === genre;
+    return matchQ && matchG;
+  });
+
+  // Sort
+  list.sort((a, b) => {
+    if (sort === 'title')     return a[1].title.localeCompare(b[1].title);
+    if (sort === 'author')    return a[1].author.localeCompare(b[1].author);
+    if (sort === 'available') return b[1].available - a[1].available;
+    return 0;
+  });
+
+  document.getElementById('catCount').textContent = `${list.length} book${list.length !== 1 ? 's' : ''}`;
+
+  if (!list.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted)">📭 No books found.</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(([id, b], i) => {
+    const color = COVER_COLORS[i % COVER_COLORS.length];
+    const emoji = BOOK_EMOJIS[i % BOOK_EMOJIS.length];
+    const availClass = b.available === 0 ? 'none' : b.available / b.copies < 0.4 ? 'low' : 'ok';
+    const availText  = b.available === 0 ? 'Out of Stock' : `${b.available} / ${b.copies} available`;
+    return `
+      <div class="book-card fade-in-card" onclick="quickBorrow('${id}')">
+        <div class="book-card-cover" style="background:${color}">
+          <span style="position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.4))">${emoji}</span>
+        </div>
+        <div class="book-card-body">
+          <div class="book-card-title">${b.title}</div>
+          <div class="book-card-author">by ${b.author}</div>
+          <div class="book-card-footer">
+            <span class="book-card-genre">${b.genre || 'General'}</span>
+            <span class="book-card-avail ${availClass}">${availText}</span>
+          </div>
+        </div>
+        <div class="book-card-overlay">
+          <h4>${b.title}</h4>
+          <p>${b.author} · ${b.genre || 'General'}</p>
+          <p style="margin-top:.25rem;font-size:.7rem;opacity:.7">Click to borrow</p>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Trigger fade-in observer on new cards
+  document.querySelectorAll('.book-card.fade-in-card').forEach(el => {
+    setTimeout(() => el.classList.add('visible'), 50);
+  });
+}
+
+function quickBorrow(bookId) {
+  showSection('borrow');
+  setTimeout(() => {
+    document.getElementById('borrowBookId').value = bookId;
+    document.getElementById('borrowBookId').focus();
+    toast(`📖 Book ID "${bookId}" filled in. Enter Member ID to borrow.`, 'success');
+  }, 300);
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────
+function renderSettings() {
+  books   = load('lms_books');
+  members = load('lms_members');
+  records = load('lms_records');
+
+  // Data stats
+  const ds = document.getElementById('dataStats');
+  if (ds) {
+    ds.innerHTML = `
+      <div class="ds-item"><div class="ds-num">${Object.keys(books).length}</div><div class="ds-label">Books</div></div>
+      <div class="ds-item"><div class="ds-num">${Object.keys(members).length}</div><div class="ds-label">Members</div></div>
+      <div class="ds-item"><div class="ds-num">${Object.keys(records).length}</div><div class="ds-label">Records</div></div>
+    `;
+  }
+
+  // Storage used
+  let total = 0;
+  ['lms_books','lms_members','lms_records'].forEach(k => {
+    total += (localStorage.getItem(k) || '').length;
+  });
+  const su = document.getElementById('storageUsed');
+  if (su) su.textContent = total < 1024 ? `${total} B` : `${(total/1024).toFixed(1)} KB`;
+
+  // Browser
+  const bi = document.getElementById('browserInfo');
+  if (bi) {
+    const ua = navigator.userAgent;
+    bi.textContent = ua.includes('Chrome') ? 'Chrome' : ua.includes('Firefox') ? 'Firefox' : ua.includes('Safari') ? 'Safari' : 'Browser';
+  }
+
+  // Load saved config
+  const cfg = JSON.parse(localStorage.getItem('lms_config') || '{}');
+  if (cfg.loanDays) document.getElementById('loanDays').value = cfg.loanDays;
+  if (cfg.fineRate) document.getElementById('fineRate').value = cfg.fineRate;
+  if (cfg.libName)  document.getElementById('libName').value  = cfg.libName;
+}
+
+function saveSettings() {
+  const cfg = {
+    loanDays: parseInt(document.getElementById('loanDays').value) || 14,
+    fineRate:  parseInt(document.getElementById('fineRate').value)  || 5,
+    libName:  document.getElementById('libName').value.trim() || 'LibraryMS',
+  };
+  localStorage.setItem('lms_config', JSON.stringify(cfg));
+  // Update navbar brand
+  const brand = document.querySelector('.nav-brand');
+  if (brand) brand.textContent = '📚 ' + cfg.libName;
+  toast('✔ Settings saved successfully.', 'success');
+}
+
+function setAccent(primary, dark, light, el) {
+  document.documentElement.style.setProperty('--primary',       primary);
+  document.documentElement.style.setProperty('--primary-dark',  dark);
+  document.documentElement.style.setProperty('--primary-light', light);
+  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  localStorage.setItem('lms_accent', JSON.stringify({ primary, dark, light }));
+  toast('🎨 Accent color updated.', 'success');
+}
+
+function toggleAnimations(cb) {
+  const canvas = document.getElementById('bgCanvas');
+  if (canvas) canvas.style.display = cb.checked ? 'block' : 'none';
+}
+
+function toggleCompact(cb) {
+  document.body.classList.toggle('compact', cb.checked);
+}
+
+function exportData() {
+  const data = {
+    books:   load('lms_books'),
+    members: load('lms_members'),
+    records: load('lms_records'),
+    exported: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = `libraryms_backup_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  toast('📥 Data exported successfully.', 'success');
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data.books)   save('lms_books',   data.books);
+      if (data.members) save('lms_members', data.members);
+      if (data.records) save('lms_records', data.records);
+      books   = load('lms_books');
+      members = load('lms_members');
+      records = load('lms_records');
+      renderSettings();
+      toast('📤 Data imported successfully.', 'success');
+    } catch { toast('❌ Invalid JSON file.', 'error'); }
+  };
+  reader.readAsText(file);
+}
+
+function clearAllData() {
+  confirm('⚠️ This will permanently delete ALL books, members, and records. Are you sure?', () => {
+    localStorage.removeItem('lms_books');
+    localStorage.removeItem('lms_members');
+    localStorage.removeItem('lms_records');
+    books = {}; members = {}; records = {};
+    renderSettings();
+    renderDashboard();
+    toast('🗑️ All data cleared.', 'warning');
+  });
+}
+
+// ── Restore accent on load ─────────────────────────────────────────
+(function restoreAccent() {
+  const a = JSON.parse(localStorage.getItem('lms_accent') || 'null');
+  if (a) {
+    document.documentElement.style.setProperty('--primary',       a.primary);
+    document.documentElement.style.setProperty('--primary-dark',  a.dark);
+    document.documentElement.style.setProperty('--primary-light', a.light);
+  }
+  const cfg = JSON.parse(localStorage.getItem('lms_config') || '{}');
+  if (cfg.libName) {
+    const brand = document.querySelector('.nav-brand');
+    if (brand) brand.textContent = '📚 ' + cfg.libName;
+  }
+})();
