@@ -1,5 +1,10 @@
 # 📚 Library Management System
 
+[![GitHub Pages](https://img.shields.io/badge/Live%20Site-GitHub%20Pages-6c63ff?style=flat-square&logo=github)](https://sanketpal528-cyber.github.io/library_management.py/)
+[![Version](https://img.shields.io/badge/Version-1.2.0-06d6a0?style=flat-square)](CHANGELOG.md)
+[![License](https://img.shields.io/badge/License-MIT-f72585?style=flat-square)](LICENSE)
+[![Made with](https://img.shields.io/badge/Made%20with-HTML%20CSS%20JS-ffd166?style=flat-square)](index.html)
+
 A web-based Library Management System built with HTML, CSS, and JavaScript.
 
 ## 🌐 Live Website
